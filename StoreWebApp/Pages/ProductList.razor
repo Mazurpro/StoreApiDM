@@ -1,0 +1,92 @@
+﻿@page "/productlist"
+
+@using StoreWebApp.Models
+
+@inject NavigationManager NavigationManager
+
+<h1 class="text-center my-4">Lista de Productos</h1>
+
+<div class="container">
+    <div class="row">
+        @foreach (var product in products)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@product.ProductArtUrl" class="card-img-top" alt="@product.Title" />
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Title</h5>
+                        <p class="card-text">@product.Description</p>
+                        <p class="card-text text-primary">@product.Price:C</p>
+                        <button class="btn btn-success" @onclick="() => AddToCart(product)">Agregar al Carrito</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<Product> products;
+
+    protected override void OnInitialized()
+    {
+        products = new List<Product>
+        {
+            new Product { ProductId = 1, Title = "Camiseta Cristiano Ronaldo", Price = 100.00m, Description = "Camiseta de Cristiano Ronaldo Manchester United", ProductArtUrl = "/images/camiseta.png" },
+            new Product { ProductId = 2, Title = "Pelota de futbol Adidas", Price = 20.00m, Description = "Balon de futbol de Adidas size 8", ProductArtUrl = "/images/pelota.png" },
+            new Product { ProductId = 3, Title = "Porteria de futbol +3 Años", Price = 30.00m, Description = "Porteria de futbol para niños plegable", ProductArtUrl = "/images/porteria.png" },
+            new Product { ProductId = 4, Title = "Botas de futbol Adidas", Price = 30.00m, Description = "Botas de cesped artificial Adidas", ProductArtUrl = "/images/botasfutbol.png" },
+            new Product { ProductId = 5, Title = "Camiseta Real Madrid 24/25", Price = 30.00m, Description = "Camiseta del Real Madrid de la temporada 24/25", ProductArtUrl = "/images/camisetaMadris.png" },
+            new Product { ProductId = 6, Title = "Balón de oro +3 Años", Price = 30.00m, Description = "Réplica del balón de oro de juguete", ProductArtUrl = "/images/bdo.png" },
+        };
+    }
+
+    private void AddToCart(Product product)
+    {
+        var cartItem = cart.FirstOrDefault(c => c.Product.ProductId == product.ProductId);
+        if (cartItem == null)
+        {
+            cart.Add(new CartItems { Product = product, Quantity = 1 });
+        }
+        else
+        {
+            cartItem.Quantity++;
+        }
+
+        CalculateTotal();
+    }
+}
+
+<style>
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+    }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .card-text {
+        margin-bottom: 1rem;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .text-primary {
+        color: #007bff !important;
+    }
+
+    .my-4 {
+        margin-top: 1.5rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+</style>

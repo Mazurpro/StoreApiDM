@@ -1,0 +1,26 @@
+﻿@page "/product-detail/{id:int}"
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    private Product product;
+
+    protected override void OnInitialized()
+    {
+        
+        product = new Product { ProductId = id, Title = $"Product {id}", Price = id * 10.00m };
+    }
+}
+
+<h3>@product.Title</h3>
+<p>Price: @product.Price:C</p>
+<p>Description: This is a great product!</p>
+
+<button @onclick="AddToCart">Add to Cart</button>
+
+@code {
+    private void AddToCart()
+    {
+        // Lógica para agregar al carrito
+    }
+}
